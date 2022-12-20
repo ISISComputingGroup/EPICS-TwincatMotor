@@ -244,8 +244,8 @@ void devMotorAxis::scaleValueToMotorRecord(double* value) {
 }
 
 void twincatMotorAxis::populateLimitStatus(st_axis_status_type *axis_status) { 
-	getInteger("STINPUTS-BLIMITFWD", &axis_status->bLimitFwd); 
-	getInteger("STINPUTS-BLIMITBWD", &axis_status->bLimitBwd);
+	getInteger(LIMITFWD(), &axis_status->bLimitFwd); 
+	getInteger(LIMITBWD(), &axis_status->bLimitBwd);
 }
 
 void ISISMotorAxis::populateLimitStatus(st_axis_status_type *axis_status) {
@@ -426,12 +426,25 @@ asynStatus devMotorAxis::poll(bool *moving) {
 	// Set the MSTA bits
 	setIntegerParam(pC_->motorStatusHomed_, st_axis_status.bHomed);
 	setIntegerParam(pC_->motorStatusProblem_, st_axis_status.bError);
-	setIntegerParam(pC_->motorStatusLowLimit_, !st_axis_status.bLimitBwd);
-	setIntegerParam(pC_->motorStatusHighLimit_, !st_axis_status.bLimitFwd);
 	setIntegerParam(pC_->motorStatusPowerOn_, st_axis_status.bEnable);
 	setIntegerParam(pC_->motorStatusAtHome_, 0);
-	setIntegerParam(pC_->motorStatusDirection_, st_axis_status.bDirection);
 	
+  int dir;
+  pC_->getIntegerParam(pC_->motorRecDirection_, &dir);
+  if (dir == 0){
+    // Move is positive from mtr rec
+    setIntegerParam(pC_->motorStatusDirection_, st_axis_status.bDirection);
+  } else {
+    // Move is negative from mtr rec, so flip direction and limits
+    setIntegerParam(pC_->motorStatusDirection_, !st_axis_status.bDirection);
+  }
+  // these are flipped by the motor record by the above
+  setIntegerParam(pC_->motorStatusHighLimit_, !st_axis_status.bLimitFwd);
+  setIntegerParam(pC_->motorStatusLowLimit_, !st_axis_status.bLimitBwd);
+  setIntegerParam(pC_->motorHighLimit_, !st_axis_status.bLimitFwd);
+  setIntegerParam(pC_->motorLowLimit_, !st_axis_status.bLimitBwd);
+
+
 	// Get the actual position
 	scaleValueToMotorRecord(&st_axis_status.fActPosition);
 	setDoubleParam(pC_->motorPosition_, st_axis_status.fActPosition);
