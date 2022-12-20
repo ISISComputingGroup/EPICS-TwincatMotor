@@ -438,11 +438,11 @@ asynStatus devMotorAxis::poll(bool *moving) {
     // Move is negative from mtr rec, so flip direction and limits
     setIntegerParam(pC_->motorStatusDirection_, !st_axis_status.bDirection);
   }
-  // these are flipped by the motor record by the above
-  setIntegerParam(pC_->motorStatusHighLimit_, !st_axis_status.bLimitFwd);
-  setIntegerParam(pC_->motorStatusLowLimit_, !st_axis_status.bLimitBwd);
-  setIntegerParam(pC_->motorHighLimit_, !st_axis_status.bLimitFwd);
-  setIntegerParam(pC_->motorLowLimit_, !st_axis_status.bLimitBwd);
+  // these are implicitly flipped by the motor record by the above. 
+  // They are 1 for disengaged, 0 for engaged, so flip before setting status bits
+  int fwd = !st_axis_status.bLimitFwd, bwd = !st_axis_status.bLimitBwd;
+  setIntegerParam(pC_->motorStatusHighLimit_, fwd);
+  setIntegerParam(pC_->motorStatusLowLimit_, bwd);
 
 
 	// Get the actual position
