@@ -1,0 +1,5 @@
+ASYN = $(SUPPORT)/asyn/master
+MOTOR = $(SUPPORT)/motor/master
+
+include $(TOP)/../../../ISIS_CONFIG
+-include $(TOP)/../../../ISIS_CONFIG.$(EPICS_HOST_ARCH)
