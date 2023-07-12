@@ -103,9 +103,6 @@ asynStatus devMotorAxis::move(double position, int relative, double minVelocity,
 		scaleValueFromMotorRecord(&maxVelocity);
 
 		int status = putDb(VELOCITY_SP(), &maxVelocity);
-
-		// Moved axis x to y at v velocity , relative=relative
-
 		
 		if (relative == 0) {
 			status |= putDb(POSITION_SP(), &position);
@@ -319,9 +316,6 @@ asynStatus devMotorAxis::putDb(std::string pvSuffix, const void *value) {
 		throw std::runtime_error("PV not found: " + fullPV);
         return asynError;
     }
-
-	//TODO if debug report all puts here
-
     return (asynStatus) dbPutField(&addr, addr.dbr_field_type, value, 1);
 }
 
