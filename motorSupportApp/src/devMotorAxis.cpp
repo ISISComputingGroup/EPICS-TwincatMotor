@@ -103,6 +103,9 @@ asynStatus devMotorAxis::move(double position, int relative, double minVelocity,
 		scaleValueFromMotorRecord(&maxVelocity);
 
 		int status = putDb(VELOCITY_SP(), &maxVelocity);
+
+		// Moved axis x to y at v velocity , relative=relative
+
 		
 		if (relative == 0) {
 			status |= putDb(POSITION_SP(), &position);
@@ -317,6 +320,8 @@ asynStatus devMotorAxis::putDb(std::string pvSuffix, const void *value) {
         return asynError;
     }
 
+	//TODO if debug report all puts here
+
     return (asynStatus) dbPutField(&addr, addr.dbr_field_type, value, 1);
 }
 
@@ -427,7 +432,7 @@ asynStatus devMotorAxis::poll(bool *moving) {
 	setIntegerParam(pC_->motorStatusHomed_, st_axis_status.bHomed);
 	setIntegerParam(pC_->motorStatusProblem_, st_axis_status.bError);
 	setIntegerParam(pC_->motorStatusPowerOn_, st_axis_status.bEnable);
-	setIntegerParam(pC_->motorStatusAtHome_, 0);
+	setIntegerParam(pC_->motorStatusAtHome_, st_axis_status.bHomed);
 	
   int dir;
   pC_->getIntegerParam(pC_->motorRecDirection_, &dir);
