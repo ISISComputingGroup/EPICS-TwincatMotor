@@ -316,7 +316,6 @@ asynStatus devMotorAxis::putDb(std::string pvSuffix, const void *value) {
 		throw std::runtime_error("PV not found: " + fullPV);
         return asynError;
     }
-
     return (asynStatus) dbPutField(&addr, addr.dbr_field_type, value, 1);
 }
 
@@ -427,7 +426,7 @@ asynStatus devMotorAxis::poll(bool *moving) {
 	setIntegerParam(pC_->motorStatusHomed_, st_axis_status.bHomed);
 	setIntegerParam(pC_->motorStatusProblem_, st_axis_status.bError);
 	setIntegerParam(pC_->motorStatusPowerOn_, st_axis_status.bEnable);
-	setIntegerParam(pC_->motorStatusAtHome_, 0);
+	setIntegerParam(pC_->motorStatusAtHome_, st_axis_status.bHomed);
 	
   int dir;
   pC_->getIntegerParam(pC_->motorRecDirection_, &dir);
