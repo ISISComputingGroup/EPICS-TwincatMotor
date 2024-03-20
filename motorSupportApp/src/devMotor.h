@@ -117,36 +117,6 @@ private:
 	asynStatus sendStop();
 };
 
-class epicsShareClass ISISMotorAxis : public devMotorAxis
-{
-public: 
-    ISISMotorAxis(class devMotorController *pC, int axisNo): devMotorAxis(pC, axisNo) {};
-
-private:
-    std::string ENABLE_STATUS() { return "BENABLE"; };
-	std::string EXECUTE() { return "BEXECUTE"; };
-	std::string VELOCITY_SP() { return "FVELOCITY"; };
-	std::string POSITION_SP() { return "FPOSITION"; };
-	std::string DISTANCE_SP() { return "FDISTANCE"; };
-	std::string ERROR_STATUS() { return "BERROR"; };
-	std::string POSITION_RBV() { return "FACTPOSITION"; };
-	std::string VELOCITY_RBV() { return "FACTVELOCITY"; };
-	std::string HOMED() { return "BCALIBRATED"; };
-	std::string POSITIVE_DIR() { return "BPOSITIVEDIRECTION"; };
-	std::string NEGATIVE_DIR() { return "BNEGATIVEDIRECTION"; };
-	std::string MOVING() { return "BMOVING"; };
-	std::string COMMAND() { return "ECOMMAND"; };
-	
-	epicsInt32 HOME_COMMAND() { return 13; };
-	epicsInt32 STOP_COMMAND() { return 15; };
-	epicsInt32 MOVE_ABS_COMMAND() { return 17; };
-	epicsInt32 MOVE_RELATIVE_COMMAND() { return 18; };
-	epicsInt32 MOVE_VELO_COMMAND() { return 21; };
-
-    void populateLimitStatus(st_axis_status_type *axis_status);
-	asynStatus sendStop();
-};
-
 class epicsShareClass devMotorController : public asynMotorController {
 public:
 	devMotorController(const char *portName, const char *devMotorPortName, int numAxes, const char *pvPrefix);

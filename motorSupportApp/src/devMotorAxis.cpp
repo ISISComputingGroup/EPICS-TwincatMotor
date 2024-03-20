@@ -62,7 +62,8 @@ extern "C" int devMotorCreateAxis(const char *devMotorName, int axisNo, int vers
     }
     pC->lock();
 	if (versionNumber == 0) {
-		new ISISMotorAxis(pC, axisNo);
+		printf("version 0 (old isis code) no longer supported");
+    return asynError;
 	} else if (versionNumber == 1) {
 		new twincatMotorAxis(pC, axisNo);
 	}
@@ -170,15 +171,6 @@ asynStatus devMotorAxis::moveVelocity(double minVelocity, double maxVelocity, do
 }
 
 /** 
-  * Stops the ISISMotorAxis specific stop commnad.
-  *
-  * \return The status code for the stop.
-  */
-asynStatus ISISMotorAxis::sendStop() {
-	return (asynStatus)sendCommand(STOP_COMMAND());
-}
-
-/** 
   * Stops the twincatMotorAxis specific stop commnad.
   *
   * \return The status code for the stop.
@@ -246,11 +238,6 @@ void devMotorAxis::scaleValueToMotorRecord(double* value) {
 void twincatMotorAxis::populateLimitStatus(st_axis_status_type *axis_status) { 
 	getInteger(LIMITFWD(), &axis_status->bLimitFwd); 
 	getInteger(LIMITBWD(), &axis_status->bLimitBwd);
-}
-
-void ISISMotorAxis::populateLimitStatus(st_axis_status_type *axis_status) {
-	getInteger("FWLIMIT_" + std::to_string(axisNo + 1), &axis_status->bLimitFwd, &pC_->pvPrefix); 
-	getInteger("BWLIMIT_" + std::to_string(axisNo + 1), &axis_status->bLimitBwd, &pC_->pvPrefix);
 }
 
 /**
