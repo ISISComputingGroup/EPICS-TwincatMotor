@@ -23,6 +23,7 @@ typedef struct {
     double fActPosition;   
     int bHomed;            
     int bMoving;
+	int bDone;
     int bDirection;
 } st_axis_status_type;
 
@@ -73,6 +74,7 @@ private:
 	virtual std::string VELOCITY_RBV() = 0;
 	virtual std::string HOMED() = 0;
 	virtual std::string MOVING() = 0;
+	virtual std::string DONE() = 0;
 	virtual std::string COMMAND() = 0;
 	virtual std::string POSITIVE_DIR() = 0;
 	virtual std::string NEGATIVE_DIR() = 0;
@@ -101,6 +103,7 @@ private:
 	std::string VELOCITY_RBV() { return "STSTATUS-FACTVELOCITY"; };
 	std::string HOMED() { return "STSTATUS-BHOMED"; };
 	std::string MOVING() { return "STSTATUS-BMOVING"; };
+	std::string DONE() { return "STSTATUS-BDONE"; };
 	std::string COMMAND() { return "STCONTROL-ECOMMAND"; };
 	std::string POSITIVE_DIR() { return "STSTATUS-BMOVINGFORWARD"; };
 	std::string NEGATIVE_DIR() { return "STSTATUS-BMOVINGBACKWARD"; };

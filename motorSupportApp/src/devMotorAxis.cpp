@@ -282,6 +282,7 @@ asynStatus devMotorAxis::pollAll(st_axis_status_type *axis_status) {
 	getDouble(POSITION_RBV(), &axis_status->fActPosition);
 	getDouble(VELOCITY_RBV(), &axis_status->fActVelocity);
 	getInteger(HOMED(), &axis_status->bHomed);
+	getInteger(DONE(), &axis_status->bDone);
 	getInteger(MOVING(), &axis_status->bMoving);
 	getDirection(&axis_status->bDirection);
 	populateLimitStatus(axis_status);
@@ -438,8 +439,10 @@ asynStatus devMotorAxis::poll(bool *moving) {
   // Calculate if moving and set appropriate bits
   int nowMoving = st_axis_status.bMoving;
   setIntegerParam(pC_->motorStatusMoving_, nowMoving);
-  setIntegerParam(pC_->motorStatusDone_, !nowMoving);
   *moving = nowMoving ? true : false;
+
+  setIntegerParam(pC_->motorStatusDone_, st_axis_status.bDone);
+
 
   callParamCallbacks();
   return asynSuccess;
