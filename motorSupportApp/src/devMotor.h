@@ -76,6 +76,7 @@ private:
 	virtual std::string COMMAND() = 0;
 	virtual std::string POSITIVE_DIR() = 0;
 	virtual std::string NEGATIVE_DIR() = 0;
+	virtual std::string RESET() = 0;
 
 	
 	virtual epicsInt32 HOME_COMMAND() = 0;
@@ -106,6 +107,7 @@ private:
 	std::string NEGATIVE_DIR() { return "STSTATUS-BMOVINGBACKWARD"; };
 	std::string LIMITFWD() { return "STSTATUS-BFWENABLED"; };
 	std::string LIMITBWD() { return "STSTATUS-BBWENABLED"; };
+	std::string RESET() { return "STCONTROL-BRESET"; };
 	
     epicsInt32 HOME_COMMAND() { return 10; };
 	epicsInt32 STOP_COMMAND() { return 15; };
