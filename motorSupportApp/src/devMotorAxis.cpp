@@ -100,10 +100,12 @@ asynStatus devMotorAxis::sendCommand(const int command) {
   */
 asynStatus devMotorAxis::move(double position, int relative, double minVelocity, double maxVelocity, double acceleration) {
 	try {
+		int reset = 1;
+		int status = putDb(RESET(), &reset);
 		scaleValueFromMotorRecord(&position);
 		scaleValueFromMotorRecord(&maxVelocity);
 
-		int status = putDb(VELOCITY_SP(), &maxVelocity);
+		status |= putDb(VELOCITY_SP(), &maxVelocity);
 		
 		if (relative == 0) {
 			status |= putDb(POSITION_SP(), &position);
