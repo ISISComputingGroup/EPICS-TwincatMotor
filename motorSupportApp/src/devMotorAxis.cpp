@@ -129,6 +129,18 @@ asynStatus devMotorAxis::move(double position, int relative, double minVelocity,
 	}
 }
 
+asynStatus devMotorAxis::setPosition(double position) {
+	try {
+		scaleValueToMotorRecord(&position);
+		int status = putDb(FROZEN_OFFSET_POS(), &position);
+		status |= sendCommand(SET_POS_COMMAND());
+		return (asynStatus)status;
+	} catch (const std::runtime_error& e) {
+		asynPrint(pC_->pasynUserSelf, ASYN_TRACE_ERROR|ASYN_TRACEIO_DRIVER, "Failed to set position to %f for axis %i: %s\n", position, axisNo, e.what());
+		return asynError;
+	}
+}
+
 /** 
   * Home the motor to a known position, called by the motor record.
   * 
