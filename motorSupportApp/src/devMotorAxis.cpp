@@ -131,7 +131,7 @@ asynStatus devMotorAxis::move(double position, int relative, double minVelocity,
 
 asynStatus devMotorAxis::setPosition(double position) {
 	try {
-		scaleValueToMotorRecord(&position);
+		scaleValueFromMotorRecord(&position);
 		int status = putDb(FROZEN_OFFSET_POS(), &position);
 		status |= sendCommand(SET_POS_COMMAND());
 		return (asynStatus)status;
