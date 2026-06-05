@@ -37,6 +37,7 @@ public:
 	asynStatus stop(double acceleration);
 	asynStatus pollAll(st_axis_status_type *pst_axis_status);
 	asynStatus poll(bool *moving);
+	asynStatus setPosition(double position);
 
 protected:
 	void getInteger(std::string pvSuffix, epicsInt32* pvalue, const std::string* prefix = 0);
@@ -77,12 +78,14 @@ private:
 	virtual std::string POSITIVE_DIR() = 0;
 	virtual std::string NEGATIVE_DIR() = 0;
 	virtual std::string RESET() = 0;
+	virtual std::string FROZEN_OFFSET_POS() = 0;
 
 	
 	virtual epicsInt32 HOME_COMMAND() = 0;
 	virtual epicsInt32 MOVE_ABS_COMMAND() = 0;
 	virtual epicsInt32 MOVE_RELATIVE_COMMAND() = 0;
 	virtual epicsInt32 MOVE_VELO_COMMAND() = 0;
+	virtual epicsInt32 SET_POS_COMMAND() = 0;
 };
 
 class epicsShareClass twincatMotorAxis : public devMotorAxis
@@ -108,12 +111,14 @@ private:
 	std::string LIMITFWD() { return "STSTATUS-BFWENABLED"; };
 	std::string LIMITBWD() { return "STSTATUS-BBWENABLED"; };
 	std::string RESET() { return "STCONTROL-BRESET"; };
+	std::string FROZEN_OFFSET_POS() {return "STCONTROL-FSETPOSITION";};
 	
     epicsInt32 HOME_COMMAND() { return 10; };
 	epicsInt32 STOP_COMMAND() { return 15; };
 	epicsInt32 MOVE_ABS_COMMAND() { return 0; };
 	epicsInt32 MOVE_RELATIVE_COMMAND() { return 1; };
 	epicsInt32 MOVE_VELO_COMMAND() { return 3; };
+	epicsInt32 SET_POS_COMMAND() { return 4; }
 
     void populateLimitStatus(st_axis_status_type *axis_status);
 	asynStatus sendStop();
